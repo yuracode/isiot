@@ -94,6 +94,7 @@ def add_rich(paragraph, text, size=BODY_PT, color=C_TEXT, name=FONT, bold=False)
 
 def textbox(slide, x, y, w, h, lines, size=BODY_PT, color=C_TEXT, align=PP_ALIGN.LEFT,
             anchor=MSO_ANCHOR.TOP, bullet=False, space=6):
+    x, y, w, h = (Emu(int(v)) for v in (x, y, w, h))   # 座標は整数に
     tb = slide.shapes.add_textbox(x, y, w, h)
     tf = tb.text_frame
     tf.word_wrap = True
@@ -117,6 +118,7 @@ def bullets(slide, items, x=MARGIN, y=CONTENT_TOP, w=CONTENT_W, h=Inches(5.6), s
 
 
 def box(slide, x, y, w, h, fill=None, line=None, shape=MSO_SHAPE.RECTANGLE, line_w=1.5):
+    x, y, w, h = (Emu(int(v)) for v in (x, y, w, h))   # 座標は整数に
     s = slide.shapes.add_shape(shape, x, y, w, h)
     if fill is None:
         s.fill.background()
@@ -162,6 +164,8 @@ def callout(slide, text, y, h=Inches(0.8), kind="warn", x=MARGIN, w=CONTENT_W, s
 
 
 def line(slide, x1, y1, x2, y2, color=C_TEXT, width=2.5):
+    # 座標は必ず整数にする(小数が入ると PowerPoint でファイルが開けなくなる)
+    x1, y1, x2, y2 = (Emu(int(v)) for v in (x1, y1, x2, y2))
     c = slide.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, x1, y1, x2, y2)
     c.line.color.rgb = color
     c.line.width = Pt(width)
