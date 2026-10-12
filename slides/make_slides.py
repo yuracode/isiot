@@ -22,7 +22,8 @@ OUT = HERE / "pico_sensor_intro.pptx"
 
 # ---------------------------------------------------------------- デザイン設定
 FONT = "Meiryo"            # 本文
-CODE_FONT = "MS Gothic"    # コード(等幅・日本語対応)
+CODE_FONT = "Consolas"     # コード:ソースコード用の等幅フォント(英数字)
+CODE_FONT_JA = "BIZ UDGothic"  # コード中の日本語(コメントなど)。等幅で Windows 10 以降に標準で入っている
 BODY_PT = 24
 CODE_PT = 14
 CODE_LINE_PT = 17          # コード1行の高さ(枠の位置計算に使う)
@@ -65,12 +66,13 @@ def set_font(run, size=BODY_PT, bold=False, color=C_TEXT, name=FONT):
     f.size, f.bold, f.name = Pt(size), bold, name
     f.color.rgb = color
     rpr = run._r.get_or_add_rPr()
+    ja = CODE_FONT_JA if name == CODE_FONT else name   # 日本語部分のフォント
     for tag in ("a:ea", "a:cs"):
         el = rpr.find(qn(tag))
         if el is None:
             el = rpr.makeelement(qn(tag), {})
             rpr.append(el)
-        el.set("typeface", name)
+        el.set("typeface", ja)
 
 
 def add_rich(paragraph, text, size=BODY_PT, color=C_TEXT, name=FONT, bold=False):
@@ -208,7 +210,7 @@ def calc(slide, title, formula, numbers, answer, y, x=MARGIN, w=CONTENT_W, size=
 
 def text_width_in(s, size=CODE_PT):
     """等幅フォントでの文字列の幅(インチ)をおおまかに見積もる。"""
-    units = sum(1.0 if ord(ch) > 0x2E80 else 0.5 for ch in s)
+    units = sum(1.0 if ord(ch) > 0x2E80 else 0.55 for ch in s)   # Consolas の英数字は 0.55 文字幅
     return units * size / 72
 
 
