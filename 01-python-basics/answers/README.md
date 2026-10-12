@@ -18,9 +18,8 @@
 from machine import Pin   # Pin:Pico のピンを操作するための道具
 import time               # time:待ち時間を作るための道具
 
-# Pico 本体に付いているLED(GP25)を出力にする
-# ※ Pico W の場合は Pin("LED", Pin.OUT) と書く
-led = Pin(25, Pin.OUT)
+# Pico 本体に付いているLEDを出力にする(番号ではなく "LED" と名前で指定する)
+led = Pin("LED", Pin.OUT)
 
 # ---- 関数:LEDを1回だけ点滅させる ----
 def blink():
@@ -68,7 +67,7 @@ while True:
 from machine import Pin
 import time
 
-led = Pin(25, Pin.OUT)     # 本体LED(GP25)。Pico W は Pin("LED", Pin.OUT)
+led = Pin("LED", Pin.OUT)     # 本体LED("LED" と名前で指定)
 
 # ---- 関数:times 回だけ点滅させる ----
 # ★ ( ) の中に times を書くと、呼び出すときに数を渡せる(これを「引数」という)
@@ -122,7 +121,7 @@ SOS は「短い光3回・長い光3回・短い光3回」。回数だけでな�
 from machine import Pin
 import time
 
-led = Pin(25, Pin.OUT)     # 本体LED(GP25)。Pico W は Pin("LED", Pin.OUT)
+led = Pin("LED", Pin.OUT)     # 本体LED("LED" と名前で指定)
 
 # ---- 関数:on_ms ミリ秒の点灯を times 回くり返す ----
 # 引数を2つにすると、回数と長さの両方を変えられる

@@ -3,7 +3,7 @@
 from machine import Pin
 import time
 
-led = Pin(25, Pin.OUT)     # 本体LED(GP25)。Pico W は Pin("LED", Pin.OUT)
+led = Pin("LED", Pin.OUT)     # 本体LED("LED" と名前で指定)
 
 # ---- 関数:times 回だけ点滅させる ----
 # ★ ( ) の中に times を書くと、呼び出すときに数を渡せる(これを「引数」という)

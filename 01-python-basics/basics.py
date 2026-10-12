@@ -3,9 +3,8 @@ from machine import Pin   # Pin:Pico のピンを操作するための道具
 import time               # time:待ち時間を作るための道具
 
 # ---- ピンの設定 ----
-# Pico 本体に付いているLED(GP25)を出力にする
-# ※ Pico W の場合は Pin("LED", Pin.OUT) と書く
-led = Pin(25, Pin.OUT)
+# Pico 本体に付いているLEDを出力にする(番号ではなく "LED" と名前で指定する)
+led = Pin("LED", Pin.OUT)
 
 # ---- 関数:LEDを1回だけ点滅させる ----
 # def で「よく使う処理」に名前を付けておく

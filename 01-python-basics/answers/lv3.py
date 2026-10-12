@@ -4,7 +4,7 @@
 from machine import Pin
 import time
 
-led = Pin(25, Pin.OUT)     # 本体LED(GP25)。Pico W は Pin("LED", Pin.OUT)
+led = Pin("LED", Pin.OUT)     # 本体LED("LED" と名前で指定)
 
 # ---- 関数:on_ms ミリ秒の点灯を times 回くり返す ----
 # 引数を2つにすると、回数と長さの両方を変えられる

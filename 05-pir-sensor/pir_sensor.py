@@ -7,9 +7,8 @@ import time
 # PULL_DOWN:何もつながっていないときは 0(LOW)に固定する
 pir = Pin(15, Pin.IN, Pin.PULL_DOWN)
 
-# Pico 本体に付いているLED(GP25)を出力にする
-# ※ Pico W の場合は Pin("LED", Pin.OUT) と書く
-led = Pin(25, Pin.OUT)
+# Pico 本体に付いているLEDを出力にする(番号ではなく "LED" と名前で指定する)
+led = Pin("LED", Pin.OUT)
 
 # ---- ウォームアップ ----
 # 電源を入れてすぐはセンサーが不安定なので30秒待つ

@@ -4,7 +4,7 @@ from machine import Pin
 import time
 
 pir = Pin(15, Pin.IN, Pin.PULL_DOWN)   # GP15:人感センサー(何もないとき 0)
-led = Pin(25, Pin.OUT)                 # 本体LED。Pico W は Pin("LED", Pin.OUT)
+led = Pin("LED", Pin.OUT)                 # 本体LED("LED" と名前で指定)
 
 WARMUP_SEC = 10                        # ★ ウォームアップの秒数(30 → 10)
 
