@@ -25,10 +25,10 @@ FONT = "Meiryo"            # 本文
 CODE_FONT = "Consolas"     # コード:ソースコード用の等幅フォント(英数字)
 CODE_FONT_JA = "BIZ UDGothic"  # コード中の日本語(コメントなど)。等幅で Windows 10 以降に標準で入っている
 BODY_PT = 24
-CODE_PT = 14
+CODE_PT = 16
 CODE_LINE_PT = 17          # コード1行の高さ(枠の位置計算に使う)
 SHORT_CODE_PT = 22         # 短いコード(数行の例)は大きく見せる
-CODE_MAX_LINES = 21        # 1スライドに載せるコードの最大行数
+CODE_MAX_LINES = 19        # 1スライドに載せるコードの最大行数
 
 C_TEXT = RGBColor(0x22, 0x22, 0x22)
 C_SUB = RGBColor(0x66, 0x66, 0x66)
@@ -340,8 +340,8 @@ def code_slides(title, code, notes_list, part):
         kw_legend(s, used)
         code_block(s, ch)
         if k < n - 1:
-            textbox(s, MARGIN, SH - Inches(0.85), CONTENT_W, Inches(0.4), ["→ 次のスライドに続く"],
-                    size=14, color=C_SUB, align=PP_ALIGN.RIGHT)
+            textbox(s, MARGIN, SH - Inches(0.45), CONTENT_W - Inches(2.8), Inches(0.35),
+                    ["→ 次のスライドに続く"], size=12, color=C_SUB, align=PP_ALIGN.RIGHT)
 
 
 def wiring(slide, pairs, part_name, x=MARGIN, y=CONTENT_TOP + Inches(0.1), w=Inches(6.6),
@@ -422,9 +422,8 @@ bullets(s, [
 table(s, [["番号の種類", "意味", "例"],
           ["GP番号", "プログラムで使う番号", "`Pin(3, Pin.OUT)` → GP3"],
           ["物理ピン番号", "基板上の位置(1〜40)", "GP3 は物理5番"]],
-      MARGIN, Inches(4.55), CONTENT_W, [2, 3.5, 3.5], size=20, row_h=Inches(0.5))
-callout(s, "物理3番は GND であって GP3 ではない!" + PIN_NOTE.replace("配布", " 配布"),
-        Inches(6.2), Inches(0.65), size=20)
+      MARGIN, Inches(4.4), CONTENT_W, [2, 3.5, 3.5], size=20, row_h=Inches(0.5))
+callout(s, "物理3番は GND であって GP3 ではない!\n" + PIN_NOTE, Inches(6.15), Inches(0.85), size=18)
 
 # ---- S4 Thonny
 s = new_slide("Thonny の準備", (
@@ -569,13 +568,13 @@ s = new_slide("抵抗値の計算(オームの法則)", (
     "オームの法則は、電圧イコール電流かける抵抗です。LED は光るときに約2V を使います。これを順方向電圧といいます。"
     "Pico の3.3V から LED の2V を引いた1.3V が抵抗にかかります。それを220Ωで割ると約0.006A、つまり6mA です。"
     "LED の目安の20mA より十分小さいので安全です。抵抗がないと、電流を止めるものがなくなってしまいます。"), P3)
-textbox(s, MARGIN, CONTENT_TOP, CONTENT_W, Inches(0.9), [
-    "**オームの法則:V = I × R → I = V ÷ R**  LED は光るとき約 **2V** を使う(順方向電圧 Vf・赤LEDの目安)"],
-    size=22)
-y2 = calc(s, "① 抵抗にかかる電圧", "抵抗の電圧 = Pico の電圧 − LED の電圧", "3.3V − 2.0V", "1.3V",
-          CONTENT_TOP + Inches(0.75), w=Inches(5.9), size=20)
+textbox(s, MARGIN, CONTENT_TOP - Inches(0.1), CONTENT_W, Inches(0.9), [
+    "**オームの法則:V = I × R → I = V ÷ R**",
+    "LED は光るとき約 **2V** を使う(順方向電圧 Vf・赤LEDの目安)"], size=20, space=2)
+y2 = calc(s, "① 抵抗にかかる電圧", "電源 − LED の電圧", "3.3V − 2.0V", "1.3V",
+          CONTENT_TOP + Inches(0.85), w=Inches(5.9), size=20)
 calc(s, "② 流れる電流", "I = V ÷ R", "1.3V ÷ 220Ω", "≒ 0.006A = 6mA",
-     CONTENT_TOP + Inches(0.75), x=Inches(6.8), w=Inches(5.9), size=20)
+     CONTENT_TOP + Inches(0.85), x=Inches(6.8), w=Inches(5.9), size=20)
 callout(s, "6mA は安全な範囲(LED は目安 20mA 以下、Pico の GPIO は控えめに)。\n"
         "抵抗なしだと? → 電流を止めるものがなく、大きな電流が流れてしまう!", Inches(5.4), Inches(1.1),
         size=20)
@@ -687,7 +686,8 @@ s = new_slide("プルアップ抵抗とは", (
     "押していないときは3.3V につながって1、押すと GND につながって0になります。押すと0、というのが感覚と逆なので注意です。"
     "Pico には内部にプルアップ抵抗があるので、Pin.PULL_UP と書くだけで使えます。抵抗があるので、押しても3.3V と GND がショートしません。"), P4)
 code_block(s, [" 3.3V", "  │", " [抵抗]  ← Pico の内部にある", "  │", "  ├───── GP5(入力)", "  │",
-               "  ┴ スイッチ", "  │", " GND"], x=MARGIN, y=CONTENT_TOP + Inches(0.1), w=Inches(4.8))
+               "  ┴ スイッチ", "  │", " GND"], x=MARGIN, y=CONTENT_TOP + Inches(0.1), w=Inches(4.8),
+           size=18)
 table(s, [["ボタン", "つながる先", "値"], ["押していない", "3.3V", "**HIGH(1)**"],
           ["押している", "GND", "**LOW(0)**"]],
       Inches(5.8), CONTENT_TOP + Inches(0.1), Inches(6.9), [1.3, 1, 1.1], size=22, row_h=Inches(0.6))
@@ -902,10 +902,11 @@ s = new_slide("人感センサーのしくみ", (
     "人感センサーは、人の体から出る赤外線、つまり熱の変化を感じ取ります。検知すると OUT が HIGH、いなくなると LOW になります。"
     "電源を入れてから数十秒は不安定なので、ウォームアップが必要です。また検知後しばらくは HIGH が続きます。これをホールド時間といいます。"
     "つまずきやすい点:VCC・OUT・GND の並びは製品によって違うことがあるので、基板の印字を必ず確認してください。"), P5)
-bullets(s, ["人の体から出る **赤外線(熱)の変化** を感じ取る",
-            "検知すると OUT が **HIGH**、いなくなると **LOW**",
-            "電源を入れて数十秒は不安定(**ウォームアップ**)",
-            "検知後しばらく HIGH が続く(**ホールド時間**)"], w=Inches(6.6), h=Inches(4), size=22)
+bullets(s, ["人の体の **赤外線(熱)の変化** を感じる",
+            "検知 → OUT が **HIGH**", "いなくなる → **LOW**",
+            "電源を入れて数十秒は不安定", ("→ **ウォームアップ** が必要", 1),
+            "検知後しばらく HIGH が続く", ("→ **ホールド時間**", 1)], w=Inches(6.6), h=Inches(4.2),
+        size=22)
 wiring(s, [("3V3(OUT)(物理36)", "VCC"), ("GND(物理38)", "GND"), ("GP15(物理20)", "OUT")],
        "SB412A", x=Inches(7.3), w=Inches(5.4), y=CONTENT_TOP + Inches(0.6))
 callout(s, "基板の印字で **VCC / OUT / GND の並び** を必ず確認!" + "  " + PIN_NOTE, Inches(5.7),
@@ -993,7 +994,7 @@ textbox(s, MARGIN, CONTENT_TOP - Inches(0.05), CONTENT_W, Inches(0.5), [
     "音速 約 **340m/秒**(気温15℃付近。正確には **331.5 + 0.6 × 気温**)μs = 100万分の1秒"], size=20)
 calc(s, "① 単位をそろえる", "m/秒 → cm/秒 → cm/μs", "340m/秒 = 34000cm/秒", "0.034cm/μs",
      CONTENT_TOP + Inches(0.5), w=Inches(6.1), size=18)
-calc(s, "② 往復なので 2 で割る", "距離 = 時間 × 0.034 ÷ 2", "= 時間 × 0.017 = 時間 ÷ 58.8…",
+calc(s, "② 往復なので 2 で割る", "距離 = 時間 × 0.034 ÷ 2", "時間 × 0.017(= ÷ 58.8)",
      "距離 ≒ 時間 ÷ 58(`t / 58`)", CONTENT_TOP + Inches(0.5), x=Inches(6.9), w=Inches(5.8), size=18)
 calc(s, "③ 例:Echo が 580μs", "距離 = 時間 ÷ 58", "580 ÷ 58", "10cm", Inches(4.6), size=18)
 
@@ -1024,8 +1025,8 @@ textbox(s, MARGIN, CONTENT_TOP - Inches(0.05), Inches(7.6), Inches(0.5),
 calc(s, None, "5V × R2 ÷(R1 + R2)", "5V × 2kΩ ÷(1kΩ + 2kΩ)= 5 × 2/3", "≒ 3.3V",
      CONTENT_TOP + Inches(0.55), w=Inches(7.6), size=20)
 code_block(s, ["Echo ──[1kΩ]──┬── GP11", "              │", "            [2kΩ]", "              │",
-               "             GND"], x=Inches(8.6), y=CONTENT_TOP, w=Inches(4.1))
-textbox(s, Inches(8.6), Inches(2.9), Inches(4.1), Inches(1.4),
+               "             GND"], x=Inches(8.6), y=CONTENT_TOP, w=Inches(4.1), size=18)
+textbox(s, Inches(8.6), Inches(3.2), Inches(4.1), Inches(0.9),
         ["R1 = 1kΩ(Echo 側)", "R2 = 2kΩ(GND 側)"], size=18, color=C_SUB)
 bullets(s, ["たとえ:水の流れを2つの坂に分けると、途中の高さは坂の長さで決まる",
             "**Trig** は 3.3V の信号で動くので **直結 OK**",
