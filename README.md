@@ -41,6 +41,7 @@ Raspberry Pi Pico(ラズベリーパイ ピコ)という小さなコンピュー
 
 ### 資料
 
+- [授業スライド(PowerPoint)](slides/pico_sensor_intro.pptx)(生成スクリプト:[make_slides.py](slides/make_slides.py))
 - [電気の基本まとめ](docs/electronics-basics.md)
 - [今回使うピン一覧](docs/pin-map.md)
 - [うまく動かないときは](docs/troubleshooting.md)
