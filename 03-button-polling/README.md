@@ -87,6 +87,7 @@ GND  (物理8) ─────────── ┤ もう片側
 
 下のコードをコピーして Thonny に貼り付け、▶ 実行しよう。
 
+<!-- include: button_polling.py -->
 ```python
 # ---- 必要な道具を読み込む ----
 from machine import Pin

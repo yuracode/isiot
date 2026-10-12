@@ -12,6 +12,7 @@
 
 ### 解答コード
 
+<!-- include: lv1.py -->
 ```python
 # ---- Lv1 解答例:測る間隔を変える ----
 # 元の ultrasonic.py から変えたのは ★ の行だけ
@@ -60,6 +61,7 @@ while True:
 
 ### 解答コード
 
+<!-- include: lv2.py -->
 ```python
 # ---- Lv2 解答例:気温を変数にして音速を計算し直す ----
 # 音速(m/秒)= 331.5 + 0.6 × 気温
@@ -114,6 +116,7 @@ while True:
 
 ### 解答コード
 
+<!-- include: lv3.py -->
 ```python
 # ---- Lv3 解答例:5回測った平均を表示して、値のブレを減らす ----
 from machine import Pin, time_pulse_us

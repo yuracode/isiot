@@ -12,6 +12,7 @@
 
 ### 解答コード
 
+<!-- include: lv1.py -->
 ```python
 # ---- Lv1 解答例:ウォームアップ時間を変える ----
 # 元の pir_sensor.py から変えたのは ★ の行だけ
@@ -59,6 +60,7 @@ while True:
 
 ### 解答コード
 
+<!-- include: lv2.py -->
 ```python
 # ---- Lv2 解答例:検知した回数を数える ----
 from machine import Pin
@@ -104,6 +106,7 @@ while True:
 
 ### 解答コード
 
+<!-- include: lv3.py -->
 ```python
 # ---- Lv3 解答例:検知したら信号機を赤にする(02 と組み合わせ) ----
 # 人がいる → 赤、人がいない → 緑

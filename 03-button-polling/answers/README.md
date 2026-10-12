@@ -12,6 +12,7 @@
 
 ### 解答コード
 
+<!-- include: lv1.py -->
 ```python
 # ---- Lv1 解答例:押してから黄になるまでの時間を変える ----
 # 元の button_polling.py から変えたのは ★ の1行だけ
@@ -75,6 +76,7 @@ while True:
 
 ### 解答コード
 
+<!-- include: lv2.py -->
 ```python
 # ---- Lv2 解答例:ボタンを押した回数を数えて Shell に表示する ----
 from machine import Pin
@@ -140,6 +142,7 @@ while True:
 
 ### 解答コード
 
+<!-- include: lv3.py -->
 ```python
 # ---- Lv3 解答例:長押し(1秒以上)で全色点滅モード ----
 # 考え方:押されたら「離されるまで何ミリ秒押されていたか」を数える

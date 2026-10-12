@@ -59,6 +59,7 @@ GP15     (物理20) ──────── OUT
 
 下のコードをコピーして Thonny に貼り付け、▶ 実行しよう。
 
+<!-- include: pir_sensor.py -->
 ```python
 # ---- 必要な道具を読み込む ----
 from machine import Pin

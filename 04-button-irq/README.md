@@ -61,6 +61,7 @@
 
 下のコードをコピーして Thonny に貼り付け、▶ 実行しよう。
 
+<!-- include: button_irq.py -->
 ```python
 # ---- 必要な道具を読み込む ----
 from machine import Pin

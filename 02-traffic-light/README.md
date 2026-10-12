@@ -81,6 +81,7 @@ GND  (物理3) ─────────── GND
 
 下のコードをコピーして Thonny に貼り付け、▶ 実行しよう。
 
+<!-- include: traffic_light.py -->
 ```python
 # ---- 必要な道具(モジュール)を読み込む ----
 from machine import Pin   # Pin:Pico のピンを操作するための道具

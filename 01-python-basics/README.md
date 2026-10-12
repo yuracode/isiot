@@ -23,6 +23,7 @@
 
 ファイル:[step1_on.py](step1_on.py)
 
+<!-- include: step1_on.py -->
 ```python
 from machine import Pin        # Pin:Pico のピンを操作するための道具
 
@@ -40,6 +41,7 @@ Pico 本体の小さな LED が光ったら成功!
 
 ファイル:[step2_on_off.py](step2_on_off.py)
 
+<!-- include: step2_on_off.py -->
 ```python
 from machine import Pin        # Pin:Pico のピンを操作するための道具
 import time                    # time:待ち時間を作るための道具
@@ -59,6 +61,7 @@ led.value(0)                   # 0 = 消灯
 
 ファイル:[step3_blink.py](step3_blink.py)
 
+<!-- include: step3_blink.py -->
 ```python
 from machine import Pin        # Pin:Pico のピンを操作するための道具
 import time                    # time:待ち時間を作るための道具
@@ -158,6 +161,7 @@ print(double(5))       # 10 と表示される
 
 下のコードをコピーして Thonny に貼り付け、▶ 実行しよう。
 
+<!-- include: basics.py -->
 ```python
 # ---- 必要な道具(モジュール)を読み込む ----
 from machine import Pin   # Pin:Pico のピンを操作するための道具
