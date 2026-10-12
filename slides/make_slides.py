@@ -26,6 +26,7 @@ CODE_FONT = "MS Gothic"    # コード(等幅・日本語対応)
 BODY_PT = 24
 CODE_PT = 14
 CODE_LINE_PT = 17          # コード1行の高さ(枠の位置計算に使う)
+SHORT_CODE_PT = 22         # 短いコード(数行の例)は大きく見せる
 CODE_MAX_LINES = 21        # 1スライドに載せるコードの最大行数
 
 C_TEXT = RGBColor(0x22, 0x22, 0x22)
@@ -211,8 +212,10 @@ def text_width_in(s, size=CODE_PT):
     return units * size / 72
 
 
-def code_block(slide, lines, x=MARGIN, y=CONTENT_TOP, w=CONTENT_W):
-    h = Inches(0.25) + Pt(CODE_LINE_PT) * len(lines)
+def code_block(slide, lines, x=MARGIN, y=CONTENT_TOP, w=CONTENT_W, size=CODE_PT):
+    """コードを表示し、ブロックの下端の y を返す。size で文字の大きさを変えられる。"""
+    line_pt = int(size * 1.25)   # 1行の高さ(14pt → 17pt)
+    h = Inches(0.25) + Pt(line_pt) * len(lines)
     bg = box(slide, x, y, w, h, C_CODE_BG, RGBColor(0xD0, 0xD7, 0xDE), line_w=1)
     tb = slide.shapes.add_textbox(x, y, w, h)
     tf = tb.text_frame
@@ -222,7 +225,7 @@ def code_block(slide, lines, x=MARGIN, y=CONTENT_TOP, w=CONTENT_W):
     tf.margin_top = tf.margin_bottom = Inches(0.12)
     for i, ln in enumerate(lines):
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
-        p.line_spacing = Pt(CODE_LINE_PT)
+        p.line_spacing = Pt(line_pt)
         p.alignment = PP_ALIGN.LEFT
         # コードとコメントを分けて色を付ける
         m = re.match(r"^(.*?)(#.*)?$", ln)
@@ -230,26 +233,26 @@ def code_block(slide, lines, x=MARGIN, y=CONTENT_TOP, w=CONTENT_W):
         if code_part:
             r = p.add_run()
             r.text = code_part
-            set_font(r, CODE_PT, False, C_TEXT, CODE_FONT)
+            set_font(r, size, False, C_TEXT, CODE_FONT)
         if comment:
             r = p.add_run()
             r.text = comment
-            set_font(r, CODE_PT, False, C_COMMENT, CODE_FONT)
+            set_font(r, size, False, C_COMMENT, CODE_FONT)
         if not ln:
             r = p.add_run()
             r.text = " "
-            set_font(r, CODE_PT, name=CODE_FONT)
+            set_font(r, size, name=CODE_FONT)
         # 制御構造の行を色付き枠で囲む
         kw = re.match(r"^\s*(while|if|elif|else|for|def)\b", code_part)
         if kw:
             key = {"elif": "if", "else": "if"}.get(kw.group(1), kw.group(1))
             indent = len(code_part) - len(code_part.lstrip())
-            fx = x + pad + Inches(text_width_in(" " * indent)) - Inches(0.05)
-            fw = Inches(text_width_in(code_part.rstrip()) - text_width_in(" " * indent) + 0.1)
-            fy = y + Inches(0.12) + Pt(CODE_LINE_PT) * i - Pt(1)
-            f = box(slide, fx, fy, fw, Pt(CODE_LINE_PT + 1), None, KW_COLORS[key],
+            fx = x + pad + Inches(text_width_in(" " * indent, size)) - Inches(0.05)
+            fw = Inches(text_width_in(code_part.rstrip(), size) - text_width_in(" " * indent, size) + 0.1)
+            fy = y + Inches(0.12) + Pt(line_pt) * i - Pt(1)
+            f = box(slide, fx, fy, fw, Pt(line_pt + 1), None, KW_COLORS[key],
                     MSO_SHAPE.ROUNDED_RECTANGLE, line_w=2)
-    return bg
+    return y + h
 
 
 def kw_legend(slide, used):
@@ -459,9 +462,9 @@ for title, code, pts, note in [
 ]:
     s = new_slide(title, note, P1)
     lines = code.strip("\n").split("\n")
-    code_block(s, lines, y=CONTENT_TOP + Inches(0.1))
+    bottom = code_block(s, lines, y=CONTENT_TOP + Inches(0.1), size=20)
     kw_legend(s, {"while"} if "while" in code else set())
-    bullets(s, pts, y=CONTENT_TOP + Inches(0.5) + Pt(CODE_LINE_PT) * len(lines), h=Inches(3))
+    bullets(s, pts, y=bottom + Inches(0.25), h=Inches(2), size=22)
 
 # ---- S5 順次
 s = new_slide("プログラムは上から順に動く(順次)", (
@@ -469,12 +472,12 @@ s = new_slide("プログラムは上から順に動く(順次)", (
     "当たり前のようですが、順番を入れかえると動きが変わる、ということを意識しておきましょう。"), P2)
 code_block(s, ["print(\"1行目\")", "print(\"2行目\")   # 1行目のあとに実行される",
                "print(\"3行目\")   # 2行目のあとに実行される"], y=CONTENT_TOP + Inches(0.3),
-           w=Inches(7))
+           w=Inches(8.3), size=SHORT_CODE_PT)
 for i, t in enumerate(["1行目", "2行目", "3行目"]):
     yy = CONTENT_TOP + Inches(0.2) + Inches(1.2) * i
-    label_box(s, Inches(9.2), yy, Inches(3), Inches(0.8), t, size=24)
+    label_box(s, Inches(9.7), yy, Inches(2.9), Inches(0.8), t, size=24)
     if i < 2:
-        line(s, Inches(10.7), yy + Inches(0.8), Inches(10.7), yy + Inches(1.2), C_ACCENT, 3)
+        line(s, Inches(11.15), yy + Inches(0.8), Inches(11.15), yy + Inches(1.2), C_ACCENT, 3)
 bullets(s, ["**1行ずつ、上から順番に** 実行される", "順番を入れかえると、動きも変わる"],
         y=Inches(5.0), h=Inches(1.5))
 
@@ -484,10 +487,10 @@ s = new_slide("while True: 無限ループ", (
     "True は「ずっと正しい」という意味なので、ループは終わりません。止めるときは Thonny の停止ボタンを押します。"), P2)
 kw_legend(s, {"while"})
 code_block(s, ["while True:          # True なので終わらない", "    print(\"ずっと表示\")",
-               "    time.sleep(1)    # 1秒待つ"], y=CONTENT_TOP + Inches(0.3), w=Inches(8))
+               "    time.sleep(1)    # 1秒待つ"], y=CONTENT_TOP + Inches(0.3), w=Inches(8.5), size=SHORT_CODE_PT)
 bullets(s, ["マイコンは **「ずっと動き続ける」** のが基本",
             "`while True:` の中は、終わらずにくり返される",
-            "止めるには Thonny の **停止ボタン(■)**"], y=Inches(3.0), h=Inches(2.5))
+            "止めるには Thonny の **停止ボタン(■)**"], y=Inches(3.45), h=Inches(2.5))
 
 # ---- S7 if
 s = new_slide("if 条件分岐", (
@@ -496,9 +499,9 @@ s = new_slide("if 条件分岐", (
 kw_legend(s, {"if"})
 code_block(s, ["if distance < 10:      # もし距離が10cm未満なら", "    print(\"近い!\")",
                "else:                  # そうでなければ", "    print(\"遠い\")"],
-           y=CONTENT_TOP + Inches(0.3), w=Inches(8))
+           y=CONTENT_TOP + Inches(0.3), w=Inches(8.5), size=SHORT_CODE_PT)
 bullets(s, ["「**もし** ボタンが押されていたら」", "「**もし** 距離が10cm未満なら」",
-            "条件によって、する処理を分ける"], y=Inches(3.3), h=Inches(2.5))
+            "条件によって、する処理を分ける"], y=Inches(3.85), h=Inches(2.5))
 
 # ---- S8 for
 s = new_slide("for 繰り返し", (
@@ -507,9 +510,9 @@ s = new_slide("for 繰り返し", (
 kw_legend(s, {"for"})
 code_block(s, ["for i in range(3):          # i に 0, 1, 2 が順に入る", "    print(i)",
                "", "for p in (red, yellow, green):   # LED を1個ずつ取り出す", "    p.value(1)"],
-           y=CONTENT_TOP + Inches(0.3), w=Inches(10))
+           y=CONTENT_TOP + Inches(0.3), w=Inches(10), size=SHORT_CODE_PT)
 bullets(s, ["**決まった回数** をくり返す", "**決まったもの** を順に処理する(LED を1個ずつ点灯)"],
-        y=Inches(3.9), h=Inches(2))
+        y=Inches(4.25), h=Inches(2))
 
 # ---- S9 関数
 s = new_slide("関数 def", (
@@ -519,9 +522,9 @@ s = new_slide("関数 def", (
 kw_legend(s, {"def"})
 code_block(s, ["def double(x):", "    return x * 2       # x を2倍した結果を返す", "",
                "print(double(5))       # 10 と表示される"], y=CONTENT_TOP + Inches(0.3),
-           w=Inches(9))
+           w=Inches(9), size=SHORT_CODE_PT)
 bullets(s, ["よく使う処理に **名前を付ける**", ("例:`all_off()`(全部消す)、`read_cm()`(距離を測る)", 1),
-            "`return` で **結果を返す**"], y=Inches(3.3), h=Inches(2.5))
+            "`return` で **結果を返す**"], y=Inches(3.85), h=Inches(2.5))
 
 # ---- S10 sleep
 s = new_slide("time.sleep() 待つ命令", (
