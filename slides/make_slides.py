@@ -435,6 +435,34 @@ table(s, [["ボタン", "意味"],
 callout(s, "Pico が見つからない → USB ケーブルが「充電専用」でないか確認", Inches(6.3),
         Inches(0.6), size=20)
 
+step1 = (HERE.parent / "01-python-basics" / "step1_on.py").read_text(encoding="utf-8")
+step2 = (HERE.parent / "01-python-basics" / "step2_on_off.py").read_text(encoding="utf-8")
+step3 = (HERE.parent / "01-python-basics" / "step3_blink.py").read_text(encoding="utf-8")
+# ---- まずは LED をつけてみよう(3ステップ)
+for title, code, pts, note in [
+    ("まずは LED をつけてみよう ①つける", step1, [
+        "`Pin(\"LED\", Pin.OUT)`:本体の LED を **出力** にする", "`led.value(1)`:**1 で点灯**",
+        "やってみよう:`1` を `0` にすると?(→ 消える)"],
+     "まずは3行だけのプログラムで、Pico 本体の LED をつけてみましょう。"
+     "Pin(\"LED\", Pin.OUT) で本体の LED を出力にして、value(1) で点灯です。"
+     "つまずきやすい点:右下のインタプリタが MicroPython (Raspberry Pi Pico) になっていないと動きません。"),
+    ("まずは LED をつけてみよう ②つけて消す", step2, [
+        "`time.sleep(1)`:**1秒待つ**", "上から順に:点灯 → 待つ → 消灯",
+        "やってみよう:`1` を `3` にすると?(→ 3秒光る)"],
+     "次は、つけて1秒待って消します。time.sleep(1) が1秒待つ命令です。"
+     "プログラムは上から順番に実行されるので、点灯、待つ、消灯の順に動きます。"),
+    ("まずは LED をつけてみよう ③点滅", step3, [
+        "`while True:` の中(字下げした4行)が **ずっとくり返される**", "止めるときは **停止ボタン(■)**",
+        "やってみよう:`0.5` を `0.1` にすると?(→ 速く点滅)"],
+     "最後は while True で、つけて消してをずっとくり返します。これで点滅になります。"
+     "つまずきやすい点:while の中の行は字下げ(スペース4つ)をそろえましょう。止めるときは停止ボタンです。"),
+]:
+    s = new_slide(title, note, P1)
+    lines = code.strip("\n").split("\n")
+    code_block(s, lines, y=CONTENT_TOP + Inches(0.1))
+    kw_legend(s, {"while"} if "while" in code else set())
+    bullets(s, pts, y=CONTENT_TOP + Inches(0.5) + Pt(CODE_LINE_PT) * len(lines), h=Inches(3))
+
 # ---- S5 順次
 s = new_slide("プログラムは上から順に動く(順次)", (
     "プログラムは書いた順番に、上から1行ずつ実行されます。これを順次といいます。"
