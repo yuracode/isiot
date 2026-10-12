@@ -25,10 +25,10 @@ FONT = "Meiryo"            # 本文
 CODE_FONT = "Consolas"     # コード:ソースコード用の等幅フォント(英数字)
 CODE_FONT_JA = "BIZ UDGothic"  # コード中の日本語(コメントなど)。等幅で Windows 10 以降に標準で入っている
 BODY_PT = 24
-CODE_PT = 16
+CODE_PT = 18
 CODE_LINE_PT = 17          # コード1行の高さ(枠の位置計算に使う)
 SHORT_CODE_PT = 22         # 短いコード(数行の例)は大きく見せる
-CODE_MAX_LINES = 19        # 1スライドに載せるコードの最大行数
+CODE_MAX_LINES = 17        # 1スライドに載せるコードの最大行数
 
 C_TEXT = RGBColor(0x22, 0x22, 0x22)
 C_SUB = RGBColor(0x66, 0x66, 0x66)
@@ -301,28 +301,24 @@ def new_slide(title, notes, part=None):
 def code_slides(title, code, notes_list, part):
     """長いコードを空行の位置で分割して、複数スライドに載せる(コメントは削らない)。"""
     lines = code.strip("\n").split("\n")
-    # 空行で「まとまり」に分け、はみ出さない範囲でまとまりを詰めていく
-    blocks, cur = [], []
-    for ln in lines + [""]:
-        if ln.strip():
-            cur.append(ln)
-        elif cur:
-            blocks.append(cur)
-            cur = []
-    chunks, cur = [], []
-    for b in blocks:
-        extra = len(b) + (1 if cur else 0)
-        if cur and len(cur) + extra > CODE_MAX_LINES:
-            chunks.append(cur)
-            cur = []
-        if cur:
-            cur.append("")
-        cur.extend(b)
-        while len(cur) > CODE_MAX_LINES:   # 1つのまとまりが長すぎるときは途中で区切る
-            chunks.append(cur[:CODE_MAX_LINES])
-            cur = cur[CODE_MAX_LINES:]
-    if cur:
-        chunks.append(cur)
+    # 1スライドに最大 CODE_MAX_LINES 行まで詰める。区切りは、なるべく後ろのほうの空行にする
+    chunks = []
+    rest = lines
+    while rest:
+        while rest and not rest[0].strip():          # 先頭の空行は飛ばす
+            rest = rest[1:]
+        if len(rest) <= CODE_MAX_LINES:
+            chunks.append(rest)
+            break
+        window = rest[:CODE_MAX_LINES + 1]
+        # 区切る場所の優先順位:①後ろのほうの空行 ②後ろのほうのコメント行の手前 ③ちょうど最大行数
+        near = CODE_MAX_LINES - 4
+        blanks = [i for i in range(near, CODE_MAX_LINES + 1) if not window[i].strip()]
+        comments = [i for i in range(near, CODE_MAX_LINES) if window[i].strip().startswith("#")]
+        cut = (blanks or comments or [CODE_MAX_LINES])[-1]
+        chunks.append(rest[:cut])
+        rest = rest[cut:]
+    chunks = [c for c in chunks if c]
     # 最後のスライドが数行だけにならないよう、最後の2枚を空行の位置で半分ずつに分け直す
     if len(chunks) > 1 and len(chunks[-1]) < 6:
         both = chunks[-2] + [""] + chunks[-1]
@@ -338,7 +334,8 @@ def code_slides(title, code, notes_list, part):
         used = {({"elif": "if", "else": "if"}.get(m.group(1), m.group(1)))
                 for l in ch for m in [re.match(r"^\s*(while|if|elif|else|for|def)\b", l)] if m}
         kw_legend(s, used)
-        code_block(s, ch)
+        # 長いコードは文字が大きいので、枠を左右に広げて1行が折り返さないようにする
+        code_block(s, ch, x=Inches(0.3), w=SW - Inches(0.6))
         if k < n - 1:
             textbox(s, MARGIN, SH - Inches(0.45), CONTENT_W - Inches(2.8), Inches(0.35),
                     ["→ 次のスライドに続く"], size=12, color=C_SUB, align=PP_ALIGN.RIGHT)
