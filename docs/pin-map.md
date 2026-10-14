@@ -11,6 +11,9 @@
 | 超音波 HC-SR04 | VCC / GND | VBUS(5V) / GND | 40 / 38 |
 | 超音波 Trig | | GP10 | 14 |
 | 超音波 Echo | 分圧回路経由 | GP11 | 15 |
+| OLED SSD1306 | VCC / GND | 3V3(OUT) / GND | 36 / 23 |
+| OLED SDA(I2C1) | | GP18 | 24 |
+| OLED SCL(I2C1) | | GP19 | 25 |
 
 > ⚠️ **「GP番号」と「物理ピン番号」は別物!**
 > 例:**物理3番は GND** であって、GP3 ではないよ。
@@ -18,6 +21,7 @@
 
 - 本体LED は番号ではなく `Pin("LED", Pin.OUT)` のように **"LED" という名前** で指定する(外に出ているピンではない)。
 - 物理38番の GND は人感センサーと超音波センサーで共有するよ。両方つなぐときはブレッドボードの「−」の列で GND をまとめよう。
+- 3V3(OUT)(物理36番)は人感センサーと OLED で共有するよ。ブレッドボードの「+」の列でまとめよう。
 
 公式のピン配置図(PDF):https://datasheets.raspberrypi.com/pico/Pico-R3-A4-Pinout.pdf
 
